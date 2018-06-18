@@ -1,10 +1,16 @@
 import time
 import pandas as pd
 import numpy as np
+from clear_console import clear
 
 CITY_DATA = { 'chicago': 'chicago.csv',
               'new york city': 'new_york_city.csv',
               'washington': 'washington.csv' }
+
+def welcome_message():
+	clear()
+	print('Hello! Let\'s explore some US bikeshare data!')
+	input('Press enter to continue...')
 
 def get_filters():
     """
@@ -15,19 +21,49 @@ def get_filters():
         (str) month - name of the month to filter by, or "all" to apply no month filter
         (str) day - name of the day of week to filter by, or "all" to apply no day filter
     """
-    print('Hello! Let\'s explore some US bikeshare data!')
-    # get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
+    city = ""
+    month = ""
+    day = ""
+    months = ['january', 'february', 'march', 'april', 'may', 'june', 'all']
+    days_of_week = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'all']
+    #clear the screen
+    clear()
 
+    # get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
+    while city not in CITY_DATA:
+        city = input("Please select a city's data to analyze (\"Chicago\", \"New York City\", or \"Washington\"): ").lower()
+        if city not in CITY_DATA:
+            print("Invalid selection.")
 
     # get user input for month (all, january, february, ... , june)
-
+    clear()
+    print('City: ' + city.title() + '\n' + '-'*40)
+    while month not in months:
+        month = input(	"If you'd like to filter the data by a specific month, " +
+        				"enter that month's name here (January - June). Otherwise, enter \"all\": ").lower()
+        if month not in months:
+            print("Invalid selection.")
 
     # get user input for day of week (all, monday, tuesday, ... sunday)
+    clear()
+    print('City: ' + city.title())
+    print('Month: ' + month.title()  + '\n' + '-'*40)
+    while day not in days_of_week:
+        day = input(	"If you'd like to filter the data by a specific day of the week, " +
+        				"enter that day's name here (Monday - Friday). Otherwise, enter \"all\": ").lower()
+        if day not in days_of_week:
+            print("Invalid selection.")
 
+    clear()
+    print('City: ' + city.title())
+    print('Month: ' + month.title())
+    print('Day: ' + day.title()   + '\n' + '-'*40)
+    choice = input("Do the above settings look correct (no to reselect)? ")
 
-    print('-'*40)
+    if choice.lower() == "no":
+    	city, month, day = get_filters() 
+
     return city, month, day
-
 
 def load_data(city, month, day):
     """
@@ -119,14 +155,15 @@ def user_stats(df):
 
 
 def main():
+    welcome_message()
     while True:
         city, month, day = get_filters()
-        df = load_data(city, month, day)
+        #df = load_data(city, month, day)
 
-        time_stats(df)
-        station_stats(df)
-        trip_duration_stats(df)
-        user_stats(df)
+        #time_stats(df)
+        #station_stats(df)
+        #trip_duration_stats(df)
+        #user_stats(df)
 
         restart = input('\nWould you like to restart? Enter yes or no.\n')
         if restart.lower() != 'yes':
