@@ -8,13 +8,17 @@ CITY_DATA = { 'chicago': 'chicago.csv',
               'washington': 'washington.csv' }
 
 def welcome_message():
+    """Prints a welcome message"""
     clear()
     print('Hello! Let\'s explore some US bikeshare data!')
-    input('Press enter to continue...')
+    input('Press [enter] to continue...')
 
 def quit_message():
+    """Prints a message on screen as user leaves program"""
     clear()
     print('Goodbye.')
+    time.sleep(1.5)
+    clear()
 
 def get_filters():
     """
@@ -115,21 +119,26 @@ def load_data(city, month, day):
 
 def time_stats(df):
     """Displays statistics on the most frequent times of travel."""
+    clear()
 
-    print('\nCalculating The Most Frequent Times of Travel...\n')
+    print('Calculating The Most Frequent Times of Travel...')
     start_time = time.time()
 
-    # display the most common month
+    # calc the "most common" stats
+    most_common_month = df['month'].mode()[0]
+    most_common_day = df['day_of_week'].mode()[0]
+    most_common_hour = df['Start Time'].dt.hour.mode()[0]
 
+    # Print calculation performance times
+    print('This operation took {} seconds to complete.'.format(time.time() - start_time))
+    print('-' * 40)
+    
+    # display the statistics
+    print('Most common month: {0}\n'.format(most_common_month) +
+          'Most common day of week: {0}\n'.format(most_common_day) + 
+          'Most common hour: {0}'.format(most_common_hour))
 
-    # display the most common day of week
-
-
-    # display the most common start hour
-
-
-    print("\nThis took %s seconds." % (time.time() - start_time))
-    print('-'*40)
+    input('Press [enter] to return to Main Menu...')
 
 
 def station_stats(df):
@@ -192,7 +201,7 @@ def menu(city, month, day, df):
     """
     # Initialize variables
     choice = ''
-    options = ['1','2','3','4','5','6','q']
+    options = {'1':time_stats,'2':None,'3':None,'4':None,'5':None,'6':None,'q':None}
     #Loop menu until user quits
     while choice != 'q':
         # Reinitialize choice
@@ -216,9 +225,8 @@ def menu(city, month, day, df):
             if choice not in options:
                 print('Invalid choice. Please try again.')
 
-
-
-
+        if choice != 'q':
+            options[choice](df)
 
 def main():
     welcome_message()
