@@ -8,9 +8,13 @@ CITY_DATA = { 'chicago': 'chicago.csv',
               'washington': 'washington.csv' }
 
 def welcome_message():
-	clear()
-	print('Hello! Let\'s explore some US bikeshare data!')
-	input('Press enter to continue...')
+    clear()
+    print('Hello! Let\'s explore some US bikeshare data!')
+    input('Press enter to continue...')
+
+def quit_message():
+    clear()
+    print('Goodbye.')
 
 def get_filters():
     """
@@ -39,8 +43,8 @@ def get_filters():
     clear()
     print('City: ' + city.title() + '\n' + '-'*40)
     while month not in months:
-        month = input(	"If you'd like to filter the data by a specific month, " +
-        				"enter that month's name here (January - June). Otherwise, enter \"all\": ").lower()
+        month = input(    "If you'd like to filter the data by a specific month, " +
+                        "enter that month's name here (January - June). Otherwise, enter \"all\": ").lower()
         if month not in months:
             print("Invalid selection.")
 
@@ -49,8 +53,8 @@ def get_filters():
     print('City: ' + city.title())
     print('Month: ' + month.title()  + '\n' + '-'*40)
     while day not in days_of_week:
-        day = input(	"If you'd like to filter the data by a specific day of the week, " +
-        				"enter that day's name here (Monday - Friday). Otherwise, enter \"all\": ").lower()
+        day = input(    "If you'd like to filter the data by a specific day of the week, " +
+                        "enter that day's name here (Monday - Friday). Otherwise, enter \"all\": ").lower()
         if day not in days_of_week:
             print("Invalid selection.")
 
@@ -61,7 +65,7 @@ def get_filters():
     choice = input("Do the above settings look correct (no to reselect)? ")
 
     if choice.lower() == "no":
-    	city, month, day = get_filters() 
+        city, month, day = get_filters() 
 
     return city, month, day
 
@@ -77,9 +81,9 @@ def load_data(city, month, day):
         df - Pandas DataFrame containing city data filtered by month and day
     """
     
-    #Clear the screen and display loading message
+    # Clear the screen and display loading message
     clear()
-    print("Loading data set based on user conditions")
+    print("Loading data set based on selected conditions...")
 
     # Load the appropriate csv based on city provided by user
     df = pd.read_csv(CITY_DATA[city])
@@ -181,22 +185,51 @@ def user_stats(df):
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
+def menu(city, month, day, df):
+    """
+    Presents the user with navigation options to each of the stat groupings and the setting screen.
+    Collects the correspdoning user choice and calls the appropriate function.
+    """
+    # Initialize variables
+    choice = ''
+    options = ['1','2','3','4','5','6','q']
+    #Loop menu until user quits
+    while choice != 'q':
+        # Reinitialize choice
+        choice = ''
+        # Clear the screen
+        clear()
+        # Print main menu options
+        print('Main Menu\n' + '-' * 40)
+        print('City: ' + city.title())
+        print('Month: ' + month.title())
+        print('Day: ' + day.title()   + '\n' + '-'*40)
+        print('Navigation Options:\n' + 
+              '1. Time Statistics\n' +
+              '2. Station Statistics\n' +
+              '3. Trip Duration Statistics\n' +
+              '4. User Statistics\n' +
+              '5. Settings\n' + 
+              'Q. Quit\n')
+        while choice not in options:
+            choice = input("Where would you like to go: ").lower()
+            if choice not in options:
+                print('Invalid choice. Please try again.')
+
+
+
+
 
 def main():
     welcome_message()
-    while True:
-        city, month, day = get_filters()
-        df = load_data(city, month, day)
-        print(df)
-        #time_stats(df)
-        #station_stats(df)
-        #trip_duration_stats(df)
-        #user_stats(df)
-
-        restart = input('\nWould you like to restart? Enter yes or no.\n')
-        if restart.lower() != 'yes':
-            break
-
+    city, month, day = get_filters()
+    df = load_data(city, month, day)
+    menu(city, month, day, df)
+    #time_stats(df)
+    #station_stats(df)
+    #trip_duration_stats(df)
+    #user_stats(df)
+    quit_message()
 
 if __name__ == "__main__":
-	main()
+    main()
