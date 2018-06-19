@@ -218,15 +218,21 @@ def menu(city, month, day, df):
               '2. Station Statistics\n' +
               '3. Trip Duration Statistics\n' +
               '4. User Statistics\n' +
-              '5. Settings\n' + 
+              '5. Raw Data\n' + 
+              '6. Settings\n' + 
               'Q. Quit\n')
         while choice not in options:
             choice = input("Where would you like to go: ").lower()
             if choice not in options:
                 print('Invalid choice. Please try again.')
 
-        if choice != 'q':
+        if choice not in ['6', 'q']:
             options[choice](df)
+        elif choice == '6':
+            city, month, day = get_filters()
+            df = load_data(city, month, day)
+
+
 
 def main():
     welcome_message()
