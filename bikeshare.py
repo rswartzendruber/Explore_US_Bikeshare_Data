@@ -17,7 +17,7 @@ def quit_message():
     """Prints a message on screen as user leaves program"""
     clear()
     print('Goodbye.')
-    time.sleep(1.5)
+    time.sleep(1.0)
     clear()
 
 def convert_seconds(seconds):
