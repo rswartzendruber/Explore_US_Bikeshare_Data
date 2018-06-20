@@ -22,6 +22,9 @@ def quit_message():
 
 def convert_seconds(seconds):
     """Converts the provided seconds value into days, hours, minutes, seconds and returns a tuple containing each of these values"""
+
+    # Converting seconds to a standard python float type to resolve the "negative 0 when using numpy.float64 type" issue .
+    seconds = float(seconds)
     
     # Convert seconds to minutes and store remainder
     minutes = seconds // 60
@@ -206,23 +209,65 @@ def trip_duration_stats(df):
 
     input('Press [enter] to return to Main Menu...')
 
-def user_stats(df):
+def user_stats(city, df):
     """Displays statistics on bikeshare users."""
 
-    print('\nCalculating User Stats...\n')
+    clear()
+
+    print('Calculating User Stats...')
     start_time = time.time()
 
-    # Display counts of user types
+    # Calc the user stats
+    output = ''
+    failed_gender = False
+    failed_birth_year = False
+    user_count = df.groupby('User Type').size().reset_index(name = 'count')
+    try:
+        gender_count = df.groupby('Gender').size().reset_index(name = 'count')
+    except KeyError:
+        failed_gender = True
+    try:
+        min_birth_year = df['Birth Year'].min()
+        max_birth_year = df['Birth Year'].max()
+        most_common_birth_year = df['Birth Year'].mode()[0]
+    except KeyError:
+        failed_birth_year = True
 
 
-    # Display counts of gender
+    # Print calculation performance times
+    print('This operation took {} seconds to complete.'.format(time.time() - start_time))
+    print('-' * 40)
 
+    # Build output string by combining literals and looping through dataframes
+    output += 'Counts of User Types\n\n'
+    for i, row in user_count.iterrows():
+        output += (str(row[0]) +
+                  ":" +
+                  ' ' * (20 - len(str(row[0]) + str(row[1]))) +
+                  str(row[1]) +
+                  '\n')
 
-    # Display earliest, most recent, and most common year of birth
+    output += '\nCounts of Genders\n\n'
+    if not failed_gender:
+        for i, row in gender_count.iterrows():
+            output += (str(row[0]) +
+                      ":" +
+                      ' ' * (20 - len(str(row[0]) + str(row[1]))) +
+                      str(row[1]) +
+                      '\n')
+    else:
+        output += 'No Gender data found for ' + city.title() + '.\n'
 
+    output += '\nBirth Year Statistics\n\n'
+    if not failed_birth_year:
+        output += ('Earliest birth year:    ' + str(min_birth_year)[:4] + '\n' +
+                   'Most recent birth year: ' + str(max_birth_year)[:4] + '\n' +
+                   'Most common birth year: ' + str(most_common_birth_year)[:4] + '\n')
+    else:
+        output += 'No Birth Year data found for ' + city.title() + '.\n'
 
-    print("\nThis took %s seconds." % (time.time() - start_time))
-    print('-'*40)
+    print(output)
+    input('Press [enter] to return to Main Menu...')
 
 def menu(city, month, day, df):
     """
@@ -231,7 +276,7 @@ def menu(city, month, day, df):
     """
     # Initialize variables
     choice = ''
-    options = {'1':time_stats,'2':station_stats,'3':trip_duration_stats,'4':None,'5':None,'6':None,'q':None}
+    options = {'1':time_stats,'2':station_stats,'3':trip_duration_stats,'4':user_stats,'5':None,'6':None,'q':None}
     #Loop menu until user quits
     while choice != 'q':
         # Reinitialize choice
@@ -252,15 +297,18 @@ def menu(city, month, day, df):
               '6. Settings\n' + 
               'Q. Quit\n')
         while choice not in options:
-            choice = input("Where would you like to go: ").lower()
+            choice = input("Where would you like to go? ").lower()
             if choice not in options:
                 print('Invalid choice. Please try again.')
 
-        if choice not in ['6', 'q']:
+        if choice not in ['4', '6', 'q']:
             options[choice](df)
+        elif choice == '4':
+             options[choice](city, df)
         elif choice == '6':
             city, month, day = get_filters()
             df = load_data(city, month, day)
+        
 
 def main():
     welcome_message()
