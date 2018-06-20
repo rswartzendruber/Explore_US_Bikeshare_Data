@@ -66,7 +66,7 @@ def get_filters():
 
     # get user input for month (all, january, february, ... , june)
     clear()
-    print('City: ' + city.title() + '\n' + '-'*40)
+    print('City:  ' + city.title() + '\n' + '-'*40)
     while month not in months:
         month = input(    "If you'd like to filter the data by a specific month, " +
                         "enter that month's name here (January - June). Otherwise, enter \"all\": ").lower()
@@ -75,7 +75,7 @@ def get_filters():
 
     # get user input for day of week (all, monday, tuesday, ... sunday)
     clear()
-    print('City: ' + city.title())
+    print('City:  ' + city.title())
     print('Month: ' + month.title()  + '\n' + '-'*40)
     while day not in days_of_week:
         day = input(    "If you'd like to filter the data by a specific day of the week, " +
@@ -84,9 +84,9 @@ def get_filters():
             print("Invalid selection.")
 
     clear()
-    print('City: ' + city.title())
+    print('City:  ' + city.title())
     print('Month: ' + month.title())
-    print('Day: ' + day.title()   + '\n' + '-'*40)
+    print('Day:   ' + day.title()   + '\n' + '-'*40)
     choice = input("Do the above settings look correct (no to reselect)? ")
 
     if choice.lower() == "no":
@@ -155,9 +155,9 @@ def time_stats(df):
     print('-' * 40)
     
     # display the statistics
-    print('Most common month: {0}\n'.format(most_common_month) +
+    print('Most common month:       {0}\n'.format(most_common_month) +
           'Most common day of week: {0}\n'.format(most_common_day) + 
-          'Most common hour: {0}\n'.format(most_common_hour))
+          'Most common hour:        {0}\n'.format(most_common_hour))
 
     input('Press [enter] to return to Main Menu...')
 
@@ -182,8 +182,8 @@ def station_stats(df):
 
     # Display the station statistics
     print('Most common start station: {0}\n'.format(most_common_start) + 
-          'Most common end station: {0}\n'.format(most_common_end) + 
-          'Most common trip: {0} to {1}\n'.format(most_common_trip['Start Station'][0], most_common_trip['End Station'][0]))
+          'Most common end station:   {0}\n'.format(most_common_end) + 
+          'Most common trip:          {0} to {1}\n'.format(most_common_trip['Start Station'][0], most_common_trip['End Station'][0]))
 
     input('Press [enter] to return to Main Menu...')
 
@@ -204,7 +204,7 @@ def trip_duration_stats(df):
     print('-' * 40)
 
     # Display trip duration statistics
-    print('Total trip duration: {0} days, {1} hours, {2} minutes, and {3} seconds\n'.format(*convert_seconds(total_trip_duration)) + 
+    print('Total trip duration:          {0} days, {1} hours, {2} minutes, and {3} seconds\n'.format(*convert_seconds(total_trip_duration)) + 
           'Average (mean) trip duration: {0} days, {1} hours, {2} minutes, and {3} seconds\n'.format(*convert_seconds(mean_trip_duration)))
 
     input('Press [enter] to return to Main Menu...')
@@ -270,9 +270,9 @@ def user_stats(city, df):
     input('Press [enter] to return to Main Menu...')
 
 def disp_raw_data(df):
-	with pd.option_context('display.max_rows', None, 'display.max_columns', None):
-		print(df)
-	input('\nPress [enter] to return to Main Menu...')
+    with pd.option_context('display.max_rows', None, 'display.max_columns', None):
+        print(df)
+    input('\nPress [enter] to return to Main Menu...')
 
 def menu(city, month, day, df):
     """
@@ -290,9 +290,9 @@ def menu(city, month, day, df):
         clear()
         # Print main menu options
         print('Main Menu\n' + '-' * 40)
-        print('City: ' + city.title())
+        print('City:  ' + city.title())
         print('Month: ' + month.title())
-        print('Day: ' + day.title()   + '\n' + '-'*40)
+        print('Day:   ' + day.title()   + '\n' + '-'*40)
         print('Navigation Options:\n' + 
               '1. Time Statistics\n' +
               '2. Station Statistics\n' +
