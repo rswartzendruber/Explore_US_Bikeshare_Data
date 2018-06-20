@@ -121,10 +121,10 @@ def time_stats(df):
     """Displays statistics on the most frequent times of travel."""
     clear()
 
-    print('Calculating The Most Frequent Times of Travel...')
+    print('Calculating the Most Frequent Times of Travel...')
     start_time = time.time()
 
-    # calc the "most common" stats
+    # calc the "most common" time stats
     most_common_month = df['month'].mode()[0]
     most_common_day = df['day_of_week'].mode()[0]
     most_common_hour = df['Start Time'].dt.hour.mode()[0]
@@ -136,28 +136,35 @@ def time_stats(df):
     # display the statistics
     print('Most common month: {0}\n'.format(most_common_month) +
           'Most common day of week: {0}\n'.format(most_common_day) + 
-          'Most common hour: {0}'.format(most_common_hour))
+          'Most common hour: {0}\n'.format(most_common_hour))
 
     input('Press [enter] to return to Main Menu...')
 
 
 def station_stats(df):
     """Displays statistics on the most popular stations and trip."""
+    clear()
 
-    print('\nCalculating The Most Popular Stations and Trip...\n')
+    print('Calculating the Most Popular Stations and Trip...')
     start_time = time.time()
 
-    # display most commonly used start station
+    # Calc the "most common" station stats
+    most_common_start = df['Start Station'].mode()[0]
+    most_common_end = df['End Station'].mode()[0]
+    most_common_trip = df.groupby(['Start Station', 'End Station']).size() \
+				         .sort_values(ascending=False) \
+				         .reset_index(name='count')
 
+    # Print calculation performance times
+    print('This operation took {} seconds to complete.'.format(time.time() - start_time))
+    print('-' * 40)
 
-    # display most commonly used end station
+    # display the statistics
+    print('Most common start station: {0}\n'.format(most_common_start) + 
+          'Most common end station: {0}\n'.format(most_common_end) + 
+          'Most common trip: {0} to {1}\n'.format(most_common_trip['Start Station'][0], most_common_trip['End Station'][0]))
 
-
-    # display most frequent combination of start station and end station trip
-
-
-    print("\nThis took %s seconds." % (time.time() - start_time))
-    print('-'*40)
+    input('Press [enter] to return to Main Menu...')
 
 
 def trip_duration_stats(df):
@@ -201,7 +208,7 @@ def menu(city, month, day, df):
     """
     # Initialize variables
     choice = ''
-    options = {'1':time_stats,'2':None,'3':None,'4':None,'5':None,'6':None,'q':None}
+    options = {'1':time_stats,'2':station_stats,'3':None,'4':None,'5':None,'6':None,'q':None}
     #Loop menu until user quits
     while choice != 'q':
         # Reinitialize choice
@@ -232,17 +239,11 @@ def menu(city, month, day, df):
             city, month, day = get_filters()
             df = load_data(city, month, day)
 
-
-
 def main():
     welcome_message()
     city, month, day = get_filters()
     df = load_data(city, month, day)
     menu(city, month, day, df)
-    #time_stats(df)
-    #station_stats(df)
-    #trip_duration_stats(df)
-    #user_stats(df)
     quit_message()
 
 if __name__ == "__main__":
