@@ -55,30 +55,30 @@ def get_filters():
     day = ""
     months = ['january', 'february', 'march', 'april', 'may', 'june', 'all']
     days_of_week = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'all']
-    #clear the screen
+    # Clear the screen
     clear()
 
-    # get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
+    # Get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
     while city not in CITY_DATA:
         city = input("Please select a city's data to analyze (\"Chicago\", \"New York City\", or \"Washington\"): ").lower()
         if city not in CITY_DATA:
             print("Invalid selection.")
 
-    # get user input for month (all, january, february, ... , june)
+    # Get user input for month (all, january, february, ... , june)
     clear()
     print('City:  ' + city.title() + '\n' + '-'*40)
     while month not in months:
-        month = input(    "If you'd like to filter the data by a specific month, " +
+        month = input(    "If you'd like to filter the data by a specific month, \n" +
                         "enter that month's name here (January - June). Otherwise, enter \"all\": ").lower()
         if month not in months:
             print("Invalid selection.")
 
-    # get user input for day of week (all, monday, tuesday, ... sunday)
+    # Get user input for day of week (all, monday, tuesday, ... sunday)
     clear()
     print('City:  ' + city.title())
     print('Month: ' + month.title()  + '\n' + '-'*40)
     while day not in days_of_week:
-        day = input(    "If you'd like to filter the data by a specific day of the week, " +
+        day = input(    "If you'd like to filter the data by a specific day of the week, \n" +
                         "enter that day's name here (Monday - Friday). Otherwise, enter \"all\": ").lower()
         if day not in days_of_week:
             print("Invalid selection.")
@@ -113,25 +113,25 @@ def load_data(city, month, day):
     # Load the appropriate csv based on city provided by user
     df = pd.read_csv(CITY_DATA[city])
 
-    # convert the Start Time column to datetime
+    # Convert the Start Time column to datetime
     df['Start Time'] = pd.to_datetime(df['Start Time'])
 
-    # extract month and day of week from Start Time to create new columns
+    # Extract month and day of week from Start Time to create new columns
     df['month'] = df['Start Time'].dt.month
     df['day_of_week'] = df['Start Time'].dt.weekday_name
     
-    # filter by month if applicable
+    # Filter by month if applicable
     if month != 'all':
-        # use the index of the months list to get the corresponding int
+        # Use the index of the months list to get the corresponding int
         months = ['january', 'february', 'march', 'april', 'may', 'june']
         month = months.index(month.lower()) + 1
     
-        # filter by month to create the new dataframe
+        # Filter by month to create the new dataframe
         df = df.loc[df['month'] == month]
 
-    # filter by day of week if applicable
+    # Filter by day of week if applicable
     if day != 'all':
-        # filter by day of week to create the new dataframe
+        # Filter by day of week to create the new dataframe
         df = df.loc[df['day_of_week'] == day.title()]
 
 
@@ -145,7 +145,7 @@ def time_stats(df):
     print('Calculating the Most Frequent Times of Travel...')
     start_time = time.time()
 
-    # calc the "most common" time stats
+    # Calc the "most common" time stats
     most_common_month = df['month'].mode()[0]
     most_common_day = df['day_of_week'].mode()[0]
     most_common_hour = df['Start Time'].dt.hour.mode()[0]
@@ -154,7 +154,7 @@ def time_stats(df):
     print('This operation took {} seconds to complete.'.format(time.time() - start_time))
     print('-' * 40)
     
-    # display the statistics
+    # Display the statistics
     print('Most common month:       {0}\n'.format(most_common_month) +
           'Most common day of week: {0}\n'.format(most_common_day) + 
           'Most common hour:        {0}\n'.format(most_common_hour))
@@ -270,6 +270,9 @@ def user_stats(city, df):
     input('Press [enter] to return to Main Menu...')
 
 def disp_raw_data(df):
+    """Displays the raw, unformatted dataframe to user in console window"""
+
+    # Using .option_context to stop truncation of the dataframe in following print statement 
     with pd.option_context('display.max_rows', None, 'display.max_columns', None):
         print(df)
     input('\nPress [enter] to return to Main Menu...')
