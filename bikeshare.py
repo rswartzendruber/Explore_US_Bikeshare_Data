@@ -269,6 +269,11 @@ def user_stats(city, df):
     print(output)
     input('Press [enter] to return to Main Menu...')
 
+def disp_raw_data(df):
+	with pd.option_context('display.max_rows', None, 'display.max_columns', None):
+		print(df)
+	input('\nPress [enter] to return to Main Menu...')
+
 def menu(city, month, day, df):
     """
     Presents the user with navigation options to each of the stat groupings and the setting screen.
@@ -276,7 +281,7 @@ def menu(city, month, day, df):
     """
     # Initialize variables
     choice = ''
-    options = {'1':time_stats,'2':station_stats,'3':trip_duration_stats,'4':user_stats,'5':None,'6':None,'q':None}
+    options = {'1':time_stats,'2':station_stats,'3':trip_duration_stats,'4':user_stats,'5':disp_raw_data,'6':None,'q':None}
     #Loop menu until user quits
     while choice != 'q':
         # Reinitialize choice
