@@ -21,21 +21,21 @@ def quit_message():
     clear()
 
 def convert_seconds(seconds):
-	"""Converts the provided seconds value into days, hours, minutes, seconds and returns a tuple containing each of these values"""
-	
-	# Convert seconds to minutes and store remainder
-	minutes = seconds // 60
-	seconds = seconds % 60
+    """Converts the provided seconds value into days, hours, minutes, seconds and returns a tuple containing each of these values"""
+    
+    # Convert seconds to minutes and store remainder
+    minutes = seconds // 60
+    seconds = seconds % 60
 
-	# Convert minutes to hours and store remainder
-	hours = minutes // 60
-	minutes = minutes % 60
+    # Convert minutes to hours and store remainder
+    hours = minutes // 60
+    minutes = minutes % 60
 
-	# Convert hours to days and store remainder
-	days = hours // 24
-	hours = hours % 24
+    # Convert hours to days and store remainder
+    days = hours // 24
+    hours = hours % 24
 
-	return days, hours, minutes, seconds
+    return days, hours, minutes, seconds
 
 
 def get_filters():
@@ -170,8 +170,8 @@ def station_stats(df):
     most_common_start = df['Start Station'].mode()[0]
     most_common_end = df['End Station'].mode()[0]
     most_common_trip = df.groupby(['Start Station', 'End Station']).size() \
-				         .sort_values(ascending=False) \
-				         .reset_index(name='count')
+                         .sort_values(ascending=False) \
+                         .reset_index(name='count')
 
     # Print calculation performance times
     print('This operation took {} seconds to complete.'.format(time.time() - start_time))
@@ -186,21 +186,25 @@ def station_stats(df):
 
 
 def trip_duration_stats(df):
-    """Displays statistics on the total and average trip duration.
-	clear()
+    """Displays statistics on the total and average trip duration."""
+    clear()
 
-    print('Calculating Trip Duration...\n')
+    print('Calculating the total and average Trip Duration...')
     start_time = time.time()
 
     # Calc the total and average trip duration
-    total_trip_duration = 
+    total_trip_duration = df['Trip Duration'].sum()
+    mean_trip_duration = df['Trip Duration'].mean()
 
     # Print calculation performance times
     print('This operation took {} seconds to complete.'.format(time.time() - start_time))
     print('-' * 40)
 
     # Display trip duration statistics
-	"""
+    print('Total trip duration: {0} days, {1} hours, {2} minutes, and {3} seconds\n'.format(*convert_seconds(total_trip_duration)) + 
+          'Average (mean) trip duration: {0} days, {1} hours, {2} minutes, and {3} seconds\n'.format(*convert_seconds(mean_trip_duration)))
+
+    input('Press [enter] to return to Main Menu...')
 
 def user_stats(df):
     """Displays statistics on bikeshare users."""
@@ -227,7 +231,7 @@ def menu(city, month, day, df):
     """
     # Initialize variables
     choice = ''
-    options = {'1':time_stats,'2':station_stats,'3':None,'4':None,'5':None,'6':None,'q':None}
+    options = {'1':time_stats,'2':station_stats,'3':trip_duration_stats,'4':None,'5':None,'6':None,'q':None}
     #Loop menu until user quits
     while choice != 'q':
         # Reinitialize choice
