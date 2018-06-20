@@ -20,6 +20,24 @@ def quit_message():
     time.sleep(1.5)
     clear()
 
+def convert_seconds(seconds):
+	"""Converts the provided seconds value into days, hours, minutes, seconds and returns a tuple containing each of these values"""
+	
+	# Convert seconds to minutes and store remainder
+	minutes = seconds // 60
+	seconds = seconds % 60
+
+	# Convert minutes to hours and store remainder
+	hours = minutes // 60
+	minutes = minutes % 60
+
+	# Convert hours to days and store remainder
+	days = hours // 24
+	hours = hours % 24
+
+	return days, hours, minutes, seconds
+
+
 def get_filters():
     """
     Asks user to specify a city, month, and day to analyze.
@@ -159,7 +177,7 @@ def station_stats(df):
     print('This operation took {} seconds to complete.'.format(time.time() - start_time))
     print('-' * 40)
 
-    # display the statistics
+    # Display the station statistics
     print('Most common start station: {0}\n'.format(most_common_start) + 
           'Most common end station: {0}\n'.format(most_common_end) + 
           'Most common trip: {0} to {1}\n'.format(most_common_trip['Start Station'][0], most_common_trip['End Station'][0]))
@@ -168,20 +186,21 @@ def station_stats(df):
 
 
 def trip_duration_stats(df):
-    """Displays statistics on the total and average trip duration."""
+    """Displays statistics on the total and average trip duration.
+	clear()
 
-    print('\nCalculating Trip Duration...\n')
+    print('Calculating Trip Duration...\n')
     start_time = time.time()
 
-    # display total travel time
+    # Calc the total and average trip duration
+    total_trip_duration = 
 
+    # Print calculation performance times
+    print('This operation took {} seconds to complete.'.format(time.time() - start_time))
+    print('-' * 40)
 
-    # display mean travel time
-
-
-    print("\nThis took %s seconds." % (time.time() - start_time))
-    print('-'*40)
-
+    # Display trip duration statistics
+	"""
 
 def user_stats(df):
     """Displays statistics on bikeshare users."""
